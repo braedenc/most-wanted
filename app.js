@@ -1,42 +1,107 @@
+function initMostWanted(people){
+	alert("Welcome to our Super Secret government search engine!");
+	do{
+		var searchType = prompt("Do you want to search by name, attributes or family? Enter word 'name', 'attributes' or 'family' here.")
+	}while(!(searchType == "name" || searchType == "attributes" || searchType == "family"));
+	switch(searchType){
+		case "name":
+			var person = searchByName(prompt("What is the persons last name?"), prompt("And now the first name please?"), people);
+			mainMenu(person, people);
+		break;
+		case "attributes":
+			var gender = prompt("What is their gender? ");
 
-/*  Remove this from your final submission
-function printAllToConsole(dataObj){
-	for (var key in dataObj) {
-		if (dataObj.hasOwnProperty(key)) {
-			console.log(key + " -> " + JSON.stringify(dataObj[key]));
-		}
+			var occupation = prompt("What is their occupation?");
+			
+			var height = prompt("What is the height?");
+
+			var weight = prompt("What is the weight?");
+
+			var age = prompt("What is the age?");
+
+			var eyeColor = prompt("What is the eye color?");
+
+			searchByAttrs(gender, occupation, height, weight, age, eyeColor, people);
+		break;
+		case "family":
+			var currentSpouse = prompt("Who is their spouse?");
+
+			var parents = prompt("Do they have parents?");
+
+			
+
+			searchByFam(parents, currentSpouse);
+		break;
+		default:
+		alert("There was an error processing your request.");
+		initMostWanted(people);
 	}
 }
-printAllToConsole(data);
-*/
 
-function initSearch(data){
-	alert("Hello World");
 
-	// get all the information you need to run the search
-	var yourName = prompt("Who do you want to search for?");
-
-	// then pass that info to the respective function.
-	var result = getPersonInfo("J", "T")
-
-	// once the search is done, pass the results to the responder function
-	responder(result);
+function searchByName(firstName, lastName, people){
+	var namefilter = people.filter(getPersonName);
+	mainMenu(people);
+	return namefilter;
 }
 
-function responder(results){
-	// results may be a list of strings, an object, or a single string.
-	alert(results);
+function mainMenu(person, people){
+	var displayOption = prompt("Would you like to know the persons 'info', 'family', next of 'kin', or 'descendants'? Type the option you want or 'restart' or 'quit'");
+	switch(displayOption){
+		case "info":
+			getPersonInfo(person, people);
+			break;
+		case "family":
+
+			break;
+		case "kin":
+
+			break;
+		case "descendants":
+
+			break;
+		case "restart":
+			initMostWanted(people)
+			break;
+		case "quit":
+			return;
+			break;
+		default:
+		alert("Please enter valid search criteria.");
+		
+	}
+	
+
+}
+function searchByAttrs(gender, occupation, height, weight, age, eyeColor, people){
+
 }
 
-function getPersonInfo(firstname, lastname){
-	var result = "This will be the information for whoever you searched for";
-	// return the object of a person
-	return result;
+function searchByFam(currentspouse, parents, people){
+
 }
 
-function getFamily(){
-	// return an array containing the members of the person's family
-	// the array should contain each person's unmodified object
+function getPersonName(person, people){
+	person => person.firstName === firstName && person.lastName === lastName
 }
 
-// there will be much more here, and some of the code above will certainly change
+function getPersonInfo(person, people){
+	alert("Person:"+person.firstName+""+person.lastName+". Their occupation is "+person.occupation+". Their date of birth is "+person.DOB+". Their weight is "
+		+person.weight+". Their height is "+person.height+". Their eye color is "+person.eyeColor+".");
+}
+
+function getFamily(person, people){
+	alert("")
+}
+
+function restart(){
+
+}
+
+function quit(){
+
+}
+
+function namefilter(){
+
+}
