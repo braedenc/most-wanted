@@ -1,12 +1,16 @@
 function initMostWanted(people){
 	alert("Welcome to our Super Secret government search engine!");
 	do{
-		var searchType = prompt("Do you want to search by name, attributes or family? Enter word 'name', 'attributes' or 'family' here.")
+		var searchType = prompt("Do you want to search by name or attributes? Enter word 'name' or 'attributes' here.")
 	}while(!(searchType == "name" || searchType == "attributes" || searchType == "family"));
 	switch(searchType){
 		case "name":
-			var person = searchByName(prompt("What is the persons last name?"), prompt("And now the first name please?"), people);
-			mainMenu(person, people);
+			var listOfPeople = searchByName(prompt("What is the persons last name?"), prompt("And now the first name please?"), people);
+			if(listOfPeople.length>0){
+				mainMenu(listOfPeople[0],people);
+			} else{
+				alert("Please enter relevant search criteria.");
+			}
 		break;
 		case "attributes":
 			var gender = prompt("What is their gender? ");
@@ -17,20 +21,12 @@ function initMostWanted(people){
 
 			var weight = prompt("What is the weight?");
 
-			var age = prompt("What is the age?");
+			var dob = prompt("What is the date of birth?");
 
 			var eyeColor = prompt("What is the eye color?");
 
-			searchByAttrs(gender, occupation, height, weight, age, eyeColor, people);
-		break;
-		case "family":
-			var currentSpouse = prompt("Who is their spouse?");
-
-			var parents = prompt("Do they have parents?");
-
-			
-
-			searchByFam(parents, currentSpouse);
+			searchByAttrs(gender, occupation, height, weight, dob, eyeColor, people);
+			mainMenu()
 		break;
 		default:
 		alert("There was an error processing your request.");
@@ -39,10 +35,13 @@ function initMostWanted(people){
 }
 
 
-function searchByName(firstName, lastName, people){
-	var namefilter = people.filter(getPersonName);
-	mainMenu(people);
-	return namefilter;
+function searchByName(lastName, firstName, people){
+    return people.filter(person => person.lastName === lastName && person.firstName === firstName);
+}
+
+function searchByAttrs(gender, occupation, height, weight, dob, eyeColor, people){
+	return attrs.filter(person.gender === gender && person.occupation === occupation && person.height === height && person.weight === weight && 
+		person.dob === dob && person.eyeColor === eyeColor)
 }
 
 function mainMenu(person, people){
@@ -73,21 +72,10 @@ function mainMenu(person, people){
 	
 
 }
-function searchByAttrs(gender, occupation, height, weight, age, eyeColor, people){
-
-}
-
-function searchByFam(currentspouse, parents, people){
-
-}
-
-function getPersonName(person, people){
-	person => person.firstName === firstName && person.lastName === lastName
-}
 
 function getPersonInfo(person, people){
-	alert("Person:"+person.firstName+""+person.lastName+". Their occupation is "+person.occupation+". Their date of birth is "+person.DOB+". Their weight is "
-		+person.weight+". Their height is "+person.height+". Their eye color is "+person.eyeColor+".");
+	alert("Person: "+person.firstName+""+person.lastName+". Occupation: "+person.occupation+". Date of birth: "+person.dob+". Weight: "
+		+person.weight+". Height: "+person.height+". Eye color: "+person.eyeColor+".");
 }
 
 function getFamily(person, people){
