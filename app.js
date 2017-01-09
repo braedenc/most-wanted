@@ -10,23 +10,18 @@ function initMostWanted(people){
 				mainMenu(listOfPeople[0],people);
 			} else{
 				alert("Please enter relevant search criteria.");
+				initMostWanted(people);
 			}
 		break;
 		case "attributes":
-			var gender = prompt("What is their gender? ");
-
-			var occupation = prompt("What is their occupation?");
-			
-			var height = prompt("What is the height?");
-
-			var weight = prompt("What is the weight?");
-
-			var dob = prompt("What is the date of birth?");
-
-			var eyeColor = prompt("What is the eye color?");
-
-			searchByAttrs(gender, occupation, height, weight, dob, eyeColor, people);
-			mainMenu()
+			var listOfAttrs = searchByAttrs(prompt("What is their gender? "), prompt("What is their occupation?"), prompt("What is the height?"), prompt("What is the weight?"), prompt("What is the date of birth?"), prompt("What is the eye color?"), people);
+			if (listOfAttrs.length>0) {
+				mainMenu(listOfAttrs[0],people);
+			} else{
+				alert("Please enter relevant search criteria.");
+				initMostWanted(people);
+			}
+		
 		break;
 		default:
 		alert("There was an error processing your request.");
@@ -40,25 +35,27 @@ function searchByName(lastName, firstName, people){
 }
 
 function searchByAttrs(gender, occupation, height, weight, dob, eyeColor, people){
-	return attrs.filter(person.gender === gender && person.occupation === occupation && person.height === height && person.weight === weight && 
+	return people.filter(person =>person.gender === gender && person.occupation === occupation && person.height.toString() === height && person.weight.toString() === weight && 
 		person.dob === dob && person.eyeColor === eyeColor)
 }
 
 function mainMenu(person, people){
-	var displayOption = prompt("Would you like to know the persons 'info', 'family', next of 'kin', or 'descendants'? Type the option you want or 'restart' or 'quit'");
+	var displayOption = prompt("found" + person.firstName + person.lastName +"\nWould you like to know the persons 'info', 'family', next of 'kin', or 'descendants'? Type the option you want or 'restart' or 'quit'");
 	switch(displayOption){
 		case "info":
 			getPersonInfo(person, people);
 			break;
 		case "family":
-
+			getFamily(person, people);
 			break;
 		case "kin":
-
+			getKin(person, people);
 			break;
 		case "descendants":
-
-			break;
+			var descendants = getDescendants(person, people);
+			for(var i = 0; i < descendants.length; i++){
+				alert("Descendants: " + descendants[i].firstName + " " + descendants[i].lastName);
+			}
 		case "restart":
 			initMostWanted(people)
 			break;
@@ -74,22 +71,35 @@ function mainMenu(person, people){
 }
 
 function getPersonInfo(person, people){
-	alert("Person: "+person.firstName+""+person.lastName+". Occupation: "+person.occupation+". Date of birth: "+person.dob+". Weight: "
-		+person.weight+". Height: "+person.height+". Eye color: "+person.eyeColor+".");
+	alert("Person: "+person.firstName+" "+person.lastName+"\nOccupation: "+person.occupation+"\nDate of birth: "+person.dob+"\nWeight: "
+		+person.weight+"\nHeight: "+person.height+"\nEye color: "+person.eyeColor+".");
+	mainMenu(person, people)
 }
 
 function getFamily(person, people){
-	alert("")
+	alert("Family: Parents- "+person.parents+", Spouse- "+person.currentSpouse+"")
 }
 
-function restart(){
+function getKin(){
 
+}
+
+function getDescendants(parent, people){
+	var kids = people.filter(function(person) {
+		if(person.parents[0] == parent.id){
+			return true;
+		} else if(person.parents[1] == parent.id){
+			return true;
+		} else {
+			return false;
+		}
+	});
+	return kids;
 }
 
 function quit(){
 
 }
 
-function namefilter(){
-
+function getParents(person,people){
 }
