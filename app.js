@@ -40,10 +40,10 @@ function searchByAttrs(gender, occupation, height, weight, dob, eyeColor, people
 }
 
 function mainMenu(person, people){
-	var displayOption = prompt("found" + person.firstName + person.lastName +"\nWould you like to know the persons 'info', 'family', next of 'kin', or 'descendants'? Type the option you want or 'restart' or 'quit'");
+	var displayOption = prompt("Found: "+person.firstName+" "+person.lastName+"\nWould you like to know the persons 'info', 'family', next of 'kin', or 'descendants'? Type the option you want or 'restart' or 'quit'");
 	switch(displayOption){
 		case "info":
-			getPersonInfo(person, people);
+			getPersonInfo(person, people, getDescendants);
 			break;
 		case "family":
 			getFamily(person, people);
@@ -55,7 +55,9 @@ function mainMenu(person, people){
 			var descendants = getDescendants(person, people);
 			for(var i = 0; i < descendants.length; i++){
 				alert("Descendants: " + descendants[i].firstName + " " + descendants[i].lastName);
-			}
+				}
+			mainMenu(people, person);
+
 		case "restart":
 			initMostWanted(people)
 			break;
@@ -76,8 +78,13 @@ function getPersonInfo(person, people){
 	mainMenu(person, people)
 }
 
-function getFamily(person, people){
-	alert("Family: Parents- "+person.parents+", Spouse- "+person.currentSpouse+"")
+function getFamily(person, people, callback){
+	var kids = getDescendants(person, people);
+	var message = "Family: Parents- "+person.parents+"\nSpouse- "+person.currentSpouse+"";
+	for(var i = 0; i<kids.length; i++){
+		message = "\nChilderen- "+kids[i].firstName+" "+kids[i].lastName+"";
+	}
+	alert(message);
 }
 
 function getKin(){
