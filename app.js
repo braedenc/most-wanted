@@ -53,9 +53,11 @@ function mainMenu(person, people){
 			break;
 		case "descendants":
 			var descendants = getDescendants(person, people);
+			var message = "Descendants: "
 			for(var i = 0; i < descendants.length; i++){
-				alert("Descendants: " + descendants[i].firstName + " " + descendants[i].lastName);
+				message +="\n" + descendants[i].firstName + " " +descendants[i].lastName+ " ";
 				}
+			alert(message);
 			mainMenu(people, person);
 
 		case "restart":
@@ -80,9 +82,13 @@ function getPersonInfo(person, people){
 
 function getFamily(person, people, callback){
 	var kids = getDescendants(person, people);
-	var message = "Family: Parents- "+person.parents+"\nSpouse- "+person.currentSpouse+"";
+	var siblings = getSiblings(person, people);
+	var message = "Family:\nParents- "+person.parents+"\nSpouse- "+person.currentSpouse+"";
 	for(var i = 0; i<kids.length; i++){
-		message = "\nChilderen- "+kids[i].firstName+" "+kids[i].lastName+"";
+		message += "\nChildren- "+kids[i].firstName+" "+kids[i].lastName+"";
+	}
+	for(var i = 0; i<siblings.length; i++){
+		message += "\nSiblings- "+siblings[i].firstName+" "+siblings[i].lastName+"";
 	}
 	alert(message);
 }
@@ -104,8 +110,15 @@ function getDescendants(parent, people){
 	return kids;
 }
 
-function quit(){
-
+function getSiblings(parent, people){
+	var siblings = people.filter(function(person) {
+		if(person[0].parents && person[0].parents == parent.id){
+			return true;
+		} else {
+			return false;
+		}
+	});
+	return siblings;
 }
 
 function getParents(person,people){
