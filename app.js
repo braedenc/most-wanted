@@ -14,13 +14,15 @@ function initMostWanted(people){
 			}
 		break;
 		case "attributes":
-			var listOfAttrs = searchByAttrs(prompt("What is their gender? "), prompt("What is their occupation?"), prompt("What is the height?"), prompt("What is the weight?"), prompt("What is the date of birth?"), prompt("What is the eye color?"), people);
-			if (listOfAttrs.length>0) {
-				mainMenu(listOfAttrs[0],people);
-			} else{
-				alert("Please enter relevant search criteria.");
-				initMostWanted(people);
-			}
+			var dob = prompt("Do you know the persons date of birth? If not then leave blank.");
+			var height = prompt("What is their height?(in inches) If not then leave blank.");
+			var weight = prompt("What is their weight?(in pounds) If not then leave blank.");
+			var gender = prompt("What is their gender? If not then leave blank.");
+			var eyeColor = prompt("What is their eye color? If not then leave blank.");
+			var occupation = prompt("What is their occupation? If not then leave blank.");
+			var filteredList = searchByAttributes(dob, height, weight, gender, eyeColor, occupation, people);
+			var selectedPerson = pickPerson(filteredList);
+			mainMenu(selectedPerson, people);
 		
 		break;
 		default:
@@ -34,9 +36,35 @@ function searchByName(lastName, firstName, people){
     return people.filter(person => person.lastName === lastName && person.firstName === firstName);
 }
 
-function searchByAttrs(gender, occupation, height, weight, dob, eyeColor, people){
-	return people.filter(person =>person.gender === gender && person.occupation === occupation && person.height.toString() === height && person.weight.toString() === weight && 
-		person.dob === dob && person.eyeColor === eyeColor)
+function pickPerson(filteredList){
+	if(filteredList.length>1){
+		var message = " ";
+		for (var i=0; i<filteredList.length; i++){
+				message += (i +": "+filteredList[i].firstName+ " " +filteredList[i].lastName+"  ");
+		}
+	}
+	alert(message);
+	var chosenPerson = prompt("Type the number of the person you would like to know more about?");
+	 return filteredList[chosenPerson];
+}
+
+function searchByAttributes(dob, height, weight, gender, eyeColor, occupation, people){
+	return people.filter(function(person){
+		if (height && (height != person.height)){
+			return false;
+		} if (weight && (weight != person.weight)){
+			return false;
+		} if (dob && (dob != person.dob)){
+			return false;
+		} if (gender && (gender != person.gender)){
+			return false;
+		} if (eyeColor && (eyeColor != person.eyeColor)){
+			return false;
+		} if (occupation && (occupation != person.occupation)){
+			return false;
+		}
+		return true;
+	});
 }
 
 function mainMenu(person, people){
@@ -111,14 +139,16 @@ function getDescendants(parent, people){
 }
 
 function getSiblings(parent, people){
-	var siblings = people.filter(function(person) {
+	var parents = people.filter(function(person) {
 		if(person[0].parents && person[0].parents == parent.id){
 			return true;
 		} else {
 			return false;
 		}
 	});
-	return siblings;
+	var siblings = people.filter(function(person) {
+
+	})
 }
 
 function getParents(person,people){
