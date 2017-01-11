@@ -109,11 +109,19 @@ function displayPersonInfo(person, people){
 }
 
 function displayFamily(person, people, callback){
-	var spouse = getPersonId(person.spouse, people);
-	var parents = getPersonId(person.parents, people)
+	var spouse = getPersonById(person.spouse, people);
+	var parents = [];
+	for(var i = 0; i < person.parents.length; i++){
+		var parent = getPersonById(person.parents[i], people);
+		parents.push(parent);
+		}
+	
+	
+
 	var kids = getKids(person, people);
 	var siblings = getSiblings(person, people);
-	var message = "Family:\nParents- "+person.parents+"\nSpouse- "+person.currentSpouse+"";
+	alert("Family: \nParents- "+parents+"\nSpouse- "+spouse+"\nChildren- "+kids+"\nSiblings- "+siblings+"")
+	/*var message = "Family:\nParents- "+person.parents+"\nSpouse- "+person.currentSpouse+"";
 	for(var i = 0; i<kids.length; i++){
 		message += "\nChildren- "+kids[i].firstName+" "+kids[i].lastName+"";
 	}
@@ -121,7 +129,9 @@ function displayFamily(person, people, callback){
 		message += "\nSiblings- "+siblings[i].firstName+" "+siblings[i].lastName+"";
 	}
 	alert(message);
+*/
 }
+
 
 function getKin(){
 
@@ -153,44 +163,22 @@ function getKids(parent, people){
 	return kids;
 }
 
-function getSiblings(parent, people){
-	var parents = people.filter(function(person) {
-		if((person.id == person.parents[0] && person.id) || person.id == person.parents[1].id){
-			return true;
-		} else {
-			return false;
-		}
-	});
-	var siblings = people.filter(function(individual){
-		if (individual.parents.includes(person.parents[0]) || individual.parents.includes(person.parents[1])){
+function getSiblings(person, people){
+	var parents = people.filter(function(individual) {
+		if(person.parents[0] == individual.parents[0] || person.parents[0] == individual.parents[1] && person.parents[1] == individual.parents[0] || person.parents[1] == individual.parents[1]){
 			return true;
 		} else{
 			return false;
-		}
+		} 
+		/*if(person.parents == ){
+
+		}*/
 	});
 }
 
-function getPersonId(id, people){
-	var personId = people.filter(function(person){
-		return (personId === id);
+function getPersonById(id, people){
+	var personid = people.filter(function(person){
+		return (personid === id);
 	});
 	return personid[0];
-}
-
-function getSpouse(currentSpouseid, people){
-    var spouseid = people.filter(function(person){
-        return (person.id === spouseid);
-    });
-    if (spouseid[0]){
-        return spouseid[0].firstName+ ""+ spouseid[0].lastName;
-    }else{
-        return "none";
-    }
-}
-
-function getParents(person,people){
-	var parents = [];
-	for (var i = 0; i < parentsId.length; i++) {
-		
-	}
 }
