@@ -71,22 +71,22 @@ function mainMenu(person, people){
 	var displayOption = prompt("Found: "+person.firstName+" "+person.lastName+"\nWould you like to know the persons 'info', 'family', next of 'kin', or 'descendants'? Type the option you want or 'restart' or 'quit'");
 	switch(displayOption){
 		case "info":
-			getPersonInfo(person, people, getDescendants);
+			displayPersonInfo(person, people, getDescendants);
 			break;
 		case "family":
-			getFamily(person, people);
+			displayFamily(person, people);
 			break;
 		case "kin":
 			getKin(person, people);
 			break;
 		case "descendants":
-			var descendants = getDescendants(person, people);
+			var descendants = getDescendants(person, people, getKids);
 			var message = "Descendants: "
 			for(var i = 0; i < descendants.length; i++){
 				message +="\n" + descendants[i].firstName + " " +descendants[i].lastName+ " ";
 				}
 			alert(message);
-			mainMenu(people, person);
+			mainMenu(person, people);
 
 		case "restart":
 			initMostWanted(people)
@@ -102,14 +102,15 @@ function mainMenu(person, people){
 
 }
 
-function getPersonInfo(person, people){
+function displayPersonInfo(person, people){
 	alert("Person: "+person.firstName+" "+person.lastName+"\nOccupation: "+person.occupation+"\nDate of birth: "+person.dob+"\nWeight: "
 		+person.weight+"\nHeight: "+person.height+"\nEye color: "+person.eyeColor+".");
 	mainMenu(person, people)
 }
 
-function getFamily(person, people, callback){
-	var kids = getDescendants(person, people);
+function displayFamily(person, people, callback){
+	var spouse = getSpouse(person, people);
+	var kids = getKids(person, people);
 	var siblings = getSiblings(person, people);
 	var message = "Family:\nParents- "+person.parents+"\nSpouse- "+person.currentSpouse+"";
 	for(var i = 0; i<kids.length; i++){
@@ -125,7 +126,20 @@ function getKin(){
 
 }
 
-function getDescendants(parent, people){
+function getDescendants(parent, people, callback, allKids = []){
+	var kids = callback(parent, people);
+	if(kids != null){
+		kids.forEach(function(child){
+			allKids.push(child);
+			getDescendants(child, people, callback, allKids);
+		});
+	}
+	return allKids;
+	
+
+}
+
+function getKids(parent, people){
 	var kids = people.filter(function(person) {
 		if(person.parents[0] == parent.id){
 			return true;
@@ -140,16 +154,32 @@ function getDescendants(parent, people){
 
 function getSiblings(parent, people){
 	var parents = people.filter(function(person) {
-		if(person[0].parents && person[0].parents == parent.id){
+		if((person.id == person.parents[0] && person.id) || person.id == person.parents[1].id){
 			return true;
 		} else {
 			return false;
 		}
 	});
-	var siblings = people.filter(function(person) {
+	var siblings = people.filter(function(individual){
+		if (individual.parents.includes(person.parents[0]) || individual.parents.includes(person.parents[1])){
+			return true;
+		} else{
+			return false;
+		}
+	});
+}
 
-	})
+function getSpouse(currentSpouseid, people){
+    var spouseid = people.filter(function(person){
+        return (person.id === spouseid);
+    });
+    if (spouseid[0]){
+        return spouseid[0].firstName+ ""+ spouseid[0].lastName;
+    }else{
+        return "none";
+    }
 }
 
 function getParents(person,people){
+
 }
