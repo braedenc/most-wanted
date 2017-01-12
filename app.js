@@ -33,7 +33,13 @@ function initMostWanted(people){
 
 
 function searchByName(lastName, firstName, people){
-    return people.filter(person => person.lastName === lastName && person.firstName === firstName);
+    return people.filter(function(person) {
+    	if(person.lastName.toLowerCase() === lastName.toLowerCase() && person.firstName.toLowerCase() === firstName.toLowerCase()){
+    		return true;
+    	} else {
+    		return false;
+    	}
+	});
 }
 
 function pickPerson(filteredList){
@@ -109,9 +115,12 @@ function displayPersonInfo(person, people){
 }
 
 function displayFamily(person, people, callback){
-	var spouse = getPersonById(person.spouse, people);
+	var spouse = getPersonById(person.currentSpouse, people);
+		if(spouse = undefined){
+			return false;
+		}
 	var parents = [];
-	for(var i = 0; i < person.parents.length; i++){
+		for(var i = 0; i < person.parents.length; i++){
 		var parent = getPersonById(person.parents[i], people);
 		parents.push(parent);
 		}
@@ -120,7 +129,7 @@ function displayFamily(person, people, callback){
 
 	var kids = getKids(person, people);
 	var siblings = getSiblings(person, people);
-	alert("Family: \nParents- "+parents+"\nSpouse- "+spouse+"\nChildren- "+kids+"\nSiblings- "+siblings+"")
+	alert("Family: \nParents- "+parents[0].firstName+" "+parents[0].lastName+", "+parents[1].firstName+" "+parents[1].lastName+"\nSpouse- "+spouse.firstName+" "+spouse.lastName+"\nChildren- "+kids+"\nSiblings- "+siblings+"")
 	/*var message = "Family:\nParents- "+person.parents+"\nSpouse- "+person.currentSpouse+"";
 	for(var i = 0; i<kids.length; i++){
 		message += "\nChildren- "+kids[i].firstName+" "+kids[i].lastName+"";
@@ -178,7 +187,7 @@ function getSiblings(person, people){
 
 function getPersonById(id, people){
 	var personid = people.filter(function(person){
-		return (personid === id);
+		return (person.id === id);
 	});
 	return personid[0];
 }
