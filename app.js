@@ -165,7 +165,7 @@ function getKids(parent, people){
 
 function getSiblings(person, people){
 	var parents = people.filter(function(individual) {
-		if(person.parents[0] == individual.parents[0] || person.parents[0] == individual.parents[1] && person.parents[1] == individual.parents[0] || person.parents[1] == individual.parents[1]){
+		if(person.parents[0] == individual.parents[0] && person.parents[1] == individual.parents[1] || person.parents[1] == individual.parents[0] && person.parents[1] == individual.parents[1]){
 			return true;
 		} else{
 			return false;
