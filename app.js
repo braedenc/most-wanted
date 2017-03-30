@@ -1,7 +1,7 @@
 function initMostWanted(people){
 	alert("Welcome to our Super Secret government search engine!");
 	do{
-		var searchType = prompt("Do you want to search by name or attributes? Enter word 'name' or 'attributes' here.")
+		var searchType = prompt("Do you want to search by name or attributes? Enter word 'name' or 'attributes' here.");
 	}while(!(searchType == "name" || searchType == "attributes" || searchType == "family"));
 	switch(searchType){
 		case "name":
@@ -23,7 +23,7 @@ function initMostWanted(people){
 			var filteredList = searchByAttributes(dob, height, weight, gender, eyeColor, occupation, people);
 			var selectedPerson = pickPerson(filteredList);
 			mainMenu(selectedPerson, people);
-		
+
 		break;
 		default:
 		alert("There was an error processing your request.");
@@ -34,11 +34,11 @@ function initMostWanted(people){
 
 function searchByName(lastName, firstName, people){
     return people.filter(function(person) {
-    	if(person.lastName.toLowerCase() === lastName.toLowerCase() && person.firstName.toLowerCase() === firstName.toLowerCase()){
-    		return true;
-    	} else {
-    		return false;
-    	}
+				if(person.lastName.toLowerCase() === lastName.toLowerCase() && person.firstName.toLowerCase() === firstName.toLowerCase()){
+					return true;
+				} else {
+					return false;
+					}
 	});
 }
 
@@ -51,7 +51,7 @@ function pickPerson(filteredList){
 	}
 	alert(message);
 	var chosenPerson = prompt("Type the number of the person you would like to know more about?");
-	 return filteredList[chosenPerson];
+	return filteredList[chosenPerson];
 }
 
 function searchByAttributes(dob, height, weight, gender, eyeColor, occupation, people){
@@ -87,49 +87,64 @@ function mainMenu(person, people){
 			break;
 		case "descendants":
 			var descendants = getDescendants(person, people, getKids);
-			var message = "Descendants: "
+			var message = "Descendants: ";
 			for(var i = 0; i < descendants.length; i++){
 				message +="\n" + descendants[i].firstName + " " +descendants[i].lastName+ " ";
 				}
 			alert(message);
 			mainMenu(person, people);
-
+			break;
 		case "restart":
-			initMostWanted(people)
+			initMostWanted(people);
 			break;
 		case "quit":
 			return;
-			break;
 		default:
 		alert("Please enter valid search criteria.");
-		
+
 	}
-	
+
 
 }
 
 function displayPersonInfo(person, people){
 	alert("Person: "+person.firstName+" "+person.lastName+"\nOccupation: "+person.occupation+"\nDate of birth: "+person.dob+"\nWeight: "
 		+person.weight+"\nHeight: "+person.height+"\nEye color: "+person.eyeColor+".");
-	mainMenu(person, people)
+	mainMenu(person, people);
 }
 
 function displayFamily(person, people, callback){
 	var spouse = getPersonById(person.currentSpouse, people);
-		if(spouse = undefined){
-			return false;
+if(!spouse){
+spouse = {"firstName" : "None", "lastName" : ""};
 		}
 	var parents = [];
 		for(var i = 0; i < person.parents.length; i++){
-		var parent = getPersonById(person.parents[i], people);
-		parents.push(parent);
+			var parent = getPersonById(person.parents[i], people);
+			parents.push(parent);
 		}
-	
-	
-
+	var parentsString = "";
+		for(var I = 0; I < parents.length; i++){
+			parentsString += " "+parents[i].firstName+" "+parents[i].lastName+",";
+		} if(!parentsString){
+			parentsString = "None";
+		}
 	var kids = getKids(person, people);
+
+	var kidsString = "";
+		for(var x = 0; i < kids.length; i++){
+			kidsString += " "+kids[x].firstName+" "+kids[x].lastName+",";
+		} if(!kidsString){
+			kidsString = "None";
+		}
+
+
 	var siblings = getSiblings(person, people);
-	alert("Family: \nParents- "+parents[0].firstName+" "+parents[0].lastName+", "+parents[1].firstName+" "+parents[1].lastName+"\nSpouse- "+spouse.firstName+" "+spouse.lastName+"\nChildren- "+kids+"\nSiblings- "+siblings+"")
+	var siblingsString = "";
+
+
+	alert("Family: \nParents- "+parentsString+"\nSpouse- "+spouse.firstName+" "+spouse.lastName+"\nChildren- "+kidsString+"\nSiblings- "+siblings+"");
+	mainMenu(person, people);
 	/*var message = "Family:\nParents- "+person.parents+"\nSpouse- "+person.currentSpouse+"";
 	for(var i = 0; i<kids.length; i++){
 		message += "\nChildren- "+kids[i].firstName+" "+kids[i].lastName+"";
@@ -155,7 +170,7 @@ function getDescendants(parent, people, callback, allKids = []){
 		});
 	}
 	return allKids;
-	
+
 
 }
 
@@ -178,7 +193,7 @@ function getSiblings(person, people){
 			return true;
 		} else{
 			return false;
-		} 
+		}
 		/*if(person.parents == ){
 
 		}*/
